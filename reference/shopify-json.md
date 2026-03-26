@@ -31,6 +31,14 @@ These names are conventional for Shopify themes (exact set depends on the theme)
 
 **Customer account JSON** (when used): under `templates/customers/` per current Shopify theme conventions.
 
+## Limits (platform)
+
+Per Shopify’s JSON templates documentation:
+
+- Up to **25 sections** per template; up to **50 blocks** per section
+- Up to **1,000** JSON templates per theme
+- Root may include optional **`layout`** (layout filename or `false`) and **`wrapper`** (HTML wrapper for all sections); see the docs for syntax
+
 ## Concepts
 
 - **Section `type`:** String matching a section the theme provides (usually the basename of `sections/\<type\>.liquid`).
