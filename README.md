@@ -2,13 +2,13 @@
 
 Theme Builder is a skill for **designers and developers** who work in **Shopify Online Store 2.0** themes and want the agent to ship real structure—not invented block names or settings that do not exist in the theme you are editing.
 
-It covers **JSON templates** (`templates/*.json`), **theme blocks** and section JSON, **Liquid `{% schema %}`** alignment, **discovery-first** workflows so types always match `blocks/` and `sections/` on disk, **design mockups** (what to infer vs what to verify in schema), and optional **bundled examples** for themes documented under [`examples/`](examples/).
-
 Install:
 
 ```bash
 npx skills add BrickspaceLab/theme-builder
 ```
+
+The skill covers **JSON templates** (`templates/*.json`), **theme blocks** and section JSON, **Liquid `{% schema %}`** alignment, **discovery-first** workflows so types always match `blocks/` and `sections/` on disk, **design mockups** (what to infer vs what to verify in schema), and optional **bundled examples** for themes documented under [`examples/`](examples/).
 
 Use it **on a case-by-case basis** rather than everywhere. Good moments: editing or adding a JSON template, wiring nested blocks to match a layout, reconciling a Figma or screenshot with what your theme actually exposes, or reviewing template JSON before commit.
 
