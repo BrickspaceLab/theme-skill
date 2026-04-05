@@ -9,6 +9,7 @@ description: >-
 
 # Theme Builder — Shopify JSON templates (Online Store 2.0)
 
+<!-- source: https://shopify.dev/docs/storefronts/themes/architecture -->
 ## When to use this skill
 
 Use when the task involves **JSON templates** under `templates/` (e.g. `product.json`, `index.json`, alternates like `page.contact.json`, or customer JSON under `templates/customers/` if present), or **section JSON** that references **theme blocks** from `blocks/` in block-based themes.
@@ -65,6 +66,9 @@ When the user provides a screenshot, Figma export, or design mockup:
 - **Limits:** JSON templates do not express every visual detail. Arbitrary typography, one-off CSS, or global palette changes may require **theme settings**, **section settings**, or **custom CSS** outside the core JSON-template workflow—say so when the design cannot be matched with schema-defined settings only.
 - If the design **cannot** be built with the theme’s available blocks and settings, **state the gap** and offer the closest achievable structure.
 
+<!-- source: https://shopify.dev/docs/storefronts/themes/architecture/blocks/theme-blocks -->
+<!-- source: https://shopify.dev/docs/storefronts/themes/architecture/blocks -->
+<!-- source: https://shopify.dev/docs/storefronts/themes/architecture/sections/section-schema -->
 ### Discover allowed block types (required)
 
 Do this **before** naming or emitting any `type` in JSON. This is the operational way to satisfy the validation rule that every `type` exists in the theme.
@@ -90,6 +94,8 @@ Within the **allowed type set** from the step above:
 - For **template-level** sections, list `sections/` and map JSON `type` to section files (usually basename of `sections/<type>.liquid`).
 - **Optional bundled example:** If [examples/README.md](examples/README.md) lists a file that **matches** this workspace theme (per its matching rules), open that file for patterns and sample JSON **after** every `type` you use is confirmed on disk. If no example fits, use a working template in this theme instead.
 
+<!-- source: https://shopify.dev/docs/storefronts/themes/architecture/sections/section-schema -->
+<!-- source: https://shopify.dev/docs/storefronts/themes/architecture/blocks/theme-blocks -->
 ### Step 3 — Analyze block and section schemas
 
 For each block or section, read `{% schema %}`:
@@ -98,6 +104,7 @@ For each block or section, read `{% schema %}`:
 2. **Settings** — Required vs optional, defaults, types (range, select, checkbox, etc.).
 3. **Presets** — Recommended configurations.
 
+<!-- source: https://shopify.dev/docs/storefronts/themes/architecture/templates/json-templates -->
 ### Step 4 — Compile JSON structure
 
 Follow Shopify’s JSON template shape. If the theme ships **Cursor rules** (e.g. `.cursor/rules/templates.mdc`, `blocks.mdc`, `schemas.mdc`), follow those for the project you are editing.
@@ -146,6 +153,7 @@ There is no universal block naming across Shopify themes. Derive structure from 
 
 Setting IDs and enums are **defined per block and section** in `{% schema %}`. Prefer defaults from schema and patterns from existing JSON in the same theme. Theme-specific lists of common keys (for themes that document them in this package) appear only under **`examples/`** for the matching theme file.
 
+<!-- source: https://shopify.dev/docs/storefronts/themes/architecture/templates/json-templates -->
 ## Validation checklist
 
 - [ ] JSON is valid
@@ -172,3 +180,16 @@ Setting IDs and enums are **defined per block and section** in `{% schema %}`. P
 - [examples/README.md](examples/README.md) — How to pick a bundled theme example; index of files
 
 In a **theme repository**, also use project rules such as `templates.mdc`, `blocks.mdc`, and `schemas.mdc` when present under `.cursor/rules/`.
+
+## Sources
+
+These are the Shopify documentation pages this skill's content is derived from. When Shopify updates these pages, review the corresponding sections above (indicated by `<!-- source: ... -->` comments).
+
+| Shopify doc | Sections in this file |
+|---|---|
+| [Theme architecture](https://shopify.dev/docs/storefronts/themes/architecture) | When to use this skill |
+| [JSON templates](https://shopify.dev/docs/storefronts/themes/architecture/templates/json-templates) | Step 4 — Compile JSON structure, Validation checklist |
+| [Sections](https://shopify.dev/docs/storefronts/themes/architecture/sections) | Discover allowed block types, Step 3 — Analyze schemas |
+| [Section schema](https://shopify.dev/docs/storefronts/themes/architecture/sections/section-schema) | Discover allowed block types, Step 3 — Analyze schemas |
+| [Blocks](https://shopify.dev/docs/storefronts/themes/architecture/blocks) | Discover allowed block types |
+| [Theme blocks](https://shopify.dev/docs/storefronts/themes/architecture/blocks/theme-blocks) | Discover allowed block types, Step 3 — Analyze schemas |

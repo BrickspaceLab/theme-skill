@@ -4,11 +4,24 @@ This file supplements [SKILL.md](../SKILL.md) with terminology and links. For bl
 
 ## Official documentation
 
+<!-- source: https://shopify.dev/docs/storefronts/themes/architecture -->
+- [Theme architecture](https://shopify.dev/docs/storefronts/themes/architecture) — how templates, sections, blocks, and assets relate
+<!-- source: https://shopify.dev/docs/storefronts/themes/architecture/templates/json-templates -->
 - [JSON templates](https://shopify.dev/docs/storefronts/themes/architecture/templates/json-templates) — structure, `sections`, `order`, limitations
-- [Section groups](https://shopify.dev/docs/storefronts/themes/architecture/section-groups) — optional grouping in JSON / layouts where applicable
+<!-- source: https://shopify.dev/docs/storefronts/themes/architecture/templates -->
+- [Templates](https://shopify.dev/docs/storefronts/themes/architecture/templates) — alternate templates, customer templates, layout key
+<!-- source: https://shopify.dev/docs/storefronts/themes/architecture/sections -->
 - [Sections](https://shopify.dev/docs/storefronts/themes/architecture/sections) — Liquid sections and schema overview
-- [Theme architecture](https://shopify.dev/docs/storefronts/themes/architecture) — how templates, sections, and assets relate
+<!-- source: https://shopify.dev/docs/storefronts/themes/architecture/sections/section-schema -->
+- [Section schema](https://shopify.dev/docs/storefronts/themes/architecture/sections/section-schema) — `{% schema %}` tag, settings, blocks, presets, limit
+<!-- source: https://shopify.dev/docs/storefronts/themes/architecture/section-groups -->
+- [Section groups](https://shopify.dev/docs/storefronts/themes/architecture/section-groups) — optional grouping in JSON / layouts where applicable
+<!-- source: https://shopify.dev/docs/storefronts/themes/architecture/blocks -->
+- [Blocks](https://shopify.dev/docs/storefronts/themes/architecture/blocks) — block files, `@theme`, `@app` references, nesting rules
+<!-- source: https://shopify.dev/docs/storefronts/themes/architecture/blocks/theme-blocks -->
+- [Theme blocks](https://shopify.dev/docs/storefronts/themes/architecture/blocks/theme-blocks) — standalone block files under `blocks/`, how they differ from section-defined blocks
 
+<!-- source: https://shopify.dev/docs/storefronts/themes/architecture/templates/json-templates -->
 ## Standard JSON template filenames
 
 These names are conventional for Shopify themes (exact set depends on the theme):
@@ -31,6 +44,7 @@ These names are conventional for Shopify themes (exact set depends on the theme)
 
 **Customer account JSON** (when used): under `templates/customers/` per current Shopify theme conventions.
 
+<!-- source: https://shopify.dev/docs/storefronts/themes/architecture/templates/json-templates -->
 ## Limits (platform)
 
 Per Shopify’s JSON templates documentation:
@@ -39,6 +53,9 @@ Per Shopify’s JSON templates documentation:
 - Up to **1,000** JSON templates per theme
 - Root may include optional **`layout`** (layout filename or `false`) and **`wrapper`** (HTML wrapper for all sections); see the docs for syntax
 
+<!-- source: https://shopify.dev/docs/storefronts/themes/architecture/templates/json-templates -->
+<!-- source: https://shopify.dev/docs/storefronts/themes/architecture/sections/section-schema -->
+<!-- source: https://shopify.dev/docs/storefronts/themes/architecture/blocks/theme-blocks -->
 ## Concepts
 
 - **Section `type`:** String matching a section the theme provides (usually the basename of `sections/\<type\>.liquid`).
@@ -47,6 +64,7 @@ Per Shopify’s JSON templates documentation:
 - **`order`:** Top-level array listing section instance keys in render order.
 - **`block_order`:** Per-level array listing block instance keys under that parent.
 
+<!-- source: https://shopify.dev/docs/storefronts/themes/architecture/templates -->
 ## Relationship to Liquid templates
 
 Themes may still use `.liquid` templates for some routes. JSON templates reference sections only; the Liquid in each section still controls markup. Do not confuse **template JSON** with **section Liquid** — both are needed, but this skill focuses on **JSON template files**.

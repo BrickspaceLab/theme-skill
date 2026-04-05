@@ -4,6 +4,7 @@ This file holds **Slab-related** bundled knowledge for this skill. Other themes 
 
 These patterns match themes that use **Slab-style** block filenames and settings (e.g. `layout__grid`, `_g__grid-item`). **Do not** use these `type` values in another theme without checking its `blocks/` and `{% schema %}`.
 
+<!-- source: https://shopify.dev/docs/storefronts/themes/architecture/blocks/theme-blocks -->
 ## Block type reference (illustrative)
 
 | Role | Typical block types |
@@ -75,6 +76,7 @@ _g__grid-item
       └── g__button
 ```
 
+<!-- source: https://shopify.dev/docs/storefronts/themes/architecture/sections/section-schema -->
 ## Settings vocabulary (typical for this theme family)
 
 Slab-style schemas often use keys like the following; **always** confirm names and enums in the target `{% schema %}`.
@@ -93,3 +95,10 @@ Slab-style schemas often use keys like the following; **always** confirm names a
 - `color_scheme` — Theme schemes.
 - `aspect_ratio` — For images.
 - `x_alignment` — e.g. `text-left`, `text-center`, `text-right`.
+
+## Sources
+
+Block type patterns and schema structure in this file are derived from theme-specific inspection. For the underlying Shopify platform concepts, see:
+
+- [Theme blocks](https://shopify.dev/docs/storefronts/themes/architecture/blocks/theme-blocks) — how `blocks/*.liquid` files work, `@theme` reference, nesting rules
+- [Section schema](https://shopify.dev/docs/storefronts/themes/architecture/sections/section-schema) — settings types, `blocks` array, `presets`, limits
