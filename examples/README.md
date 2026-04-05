@@ -14,9 +14,9 @@ Do this **after** [Discover allowed block types](../SKILL.md) on the workspace t
 ## Index
 
 
-| File                           | Documents                                                              |
-| ------------------------------ | ---------------------------------------------------------------------- |
-| [slab-theme.md](slab-theme.md) | Slab / Brickspace-style blocks (`layout__grid`, `_g__grid-item`, etc.) |
+| File                     | Documents                                                                                                                                 |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| [slab/README.md](slab/README.md) | Slab / Brickspace-style blocks (`layout__grid`, `_g__grid-item`, etc.); narrative and structure trees here, concrete JSON alongside (`*.json`, including one full **section** example) |
 
 
 Add new rows here when you add `examples/<theme>.md` files.
