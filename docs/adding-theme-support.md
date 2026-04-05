@@ -10,5 +10,3 @@ This page is for **theme partners** who want this skill to include your theme’
 4. Use `[examples/slab/README.md](../examples/slab/README.md)` as a full example of layout and depth.
 5. Add a row for your theme to the **Index** table in `[examples/README.md](../examples/README.md)`.
 6. Open a pull request with a **scoped** change: your `examples/<theme-key>/` files and the index update. Use only block types that exist in your theme’s real Liquid/schema surface.
-
-**See also:** [examples/README.md](../examples/README.md) (how agents pick a bundled example), `[reference/shopify.md](../reference/shopify.md)` (filenames and platform limits).
