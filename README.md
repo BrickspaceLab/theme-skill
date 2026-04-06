@@ -6,7 +6,7 @@ Edits Shopify JSON template files using your theme's actual block and section ty
 npx skills add BrickspaceLab/theme-skill
 ```
 
-Once installed it's easy - just easy natrual language to build Shopify websites 
+Once installed it's easy - just use natrual language to build Shopify websites 
 
 ```
 Update my index.json template with...
