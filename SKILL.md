@@ -5,7 +5,7 @@ description: Edits Shopify JSON template files using your theme's actual block a
 
 ## When to use
 
-Use when the task involves Shopify **JSON templates** under `templates/` (e.g. `product.json`, `index.json`, alternates like `page.contact.json`), **section JSON** that references **theme blocks** from `blocks/` in block-based themes, or Slab theme design settings that can be safely expressed through `config/settings_data.json`, section settings, or block settings.
+Use when the task involves Shopify **JSON templates** under `templates/` (e.g. `product.json`, `index.json`, alternates like `page.contact.json`), **section JSON** that references **theme blocks** from `blocks/` in block-based themes, or theme design settings that can be safely expressed through `config/settings_data.json`, section settings, or block settings.
 
 **This skill alone does not fully cover:**
 
@@ -23,7 +23,7 @@ If the theme uses a **build step** that generates `sections/` or `blocks/`, read
 3. **(Optional) Check bundled examples** — If `examples/` is present, follow **Choosing the best example to reference** in [examples/README.md](examples/README.md): compare the workspace theme to each indexed example and open at most one best-matched file. If nothing fits, copy patterns from existing `templates/*.json` in the workspace theme instead. Never emit `type` strings from a bundled example until they appear in the target theme’s allowed set.
 4. **Map to real blocks** — Choose types only from that allowed set; resolve section `type` from `sections/*.liquid` for template-level JSON.
 5. **Analyze schemas** — Read each block or section `{% schema %}` for allowed children, setting IDs, types, defaults, and presets.
-6. **Apply Slab design settings** — Map colors, typography, margins, borders, and animations to real global/section/block settings (see **Slab design controls**).
+6. **Apply theme design settings** — Map colors, typography, spacing, borders, and behavior to real global/section/block settings declared by the target theme.
 7. **Compile JSON** — Build valid `sections`, nested `blocks`, and `order` / `block_order` arrays per Shopify’s template structure.
 8. **Validate** — Run the checklist and JSON-focused Theme Check before finishing.
 
@@ -62,7 +62,7 @@ Do this **before** naming or emitting any `type` in JSON. This is the operationa
 
 1. **List** files in `blocks/` — For themes using theme blocks, the basename of `blocks/<name>.liquid` is typically a valid block `type` (confirm in schema).
 2. **Read** `{% schema %}` on each **section** you add or edit in the template, and on each **block** file you nest. Collect every block `type` the parent allows (specific types, `@theme`, `@app`, etc., per Shopify rules for that parent).
-   - Validate **each immediate parent/child edge**, not just whether a block exists somewhere in the theme. If `layout__flex.liquid` only allows `{ "type": "_g__flex-item" }`, then `richtext`, `image`, or `g__button` cannot be direct children of `layout__flex` even though they are valid theme blocks elsewhere. They must be nested under an allowed child such as `_g__flex-item` if that child permits them.
+   - Validate **each immediate parent/child edge**, not just whether a block exists somewhere in the theme. If a layout block only allows specific item-wrapper blocks, content blocks cannot be direct children even when they are valid theme blocks elsewhere. They must be nested under an allowed child if that child permits them.
    - Treat explicit `blocks` arrays as allow-lists. Only `@theme` permits general theme blocks; a specific list permits only those listed types plus any listed `@app`.
    > **`_`-prefix caveat:** Blocks whose filename starts with `_` (e.g. `_stat-bar.liquid`) may **not** be matched by `@theme` in a parent schema, even if they have `presets`. Shopify theme check treats `_`-prefixed blocks as private/static and may require them to be **explicitly listed** in the parent’s `blocks` array. Before nesting a `_`-prefixed block inside a parent that only declares `@theme`, verify by checking existing templates or presets for a precedent. If none exists, the parent schema needs a new `{ "type": "_block-name" }` entry—which is a Liquid edit, not a JSON-only change.
 3. **Build the allowed set** — Union of: types from `blocks/` that the parent schema permits, types declared in the parent’s `blocks` array, and section `type` values from `sections/<type>.liquid` for template-level `sections`.
@@ -95,52 +95,30 @@ For each block or section, read `{% schema %}`:
    - **`visible_if`** — Settings gated by `visible_if` may still be validated even when hidden. Prefer omitting them entirely rather than setting values that won't take effect (e.g. don't set `font_size` when `type_preset != 'custom'`).
 3. **Presets** — Recommended configurations.
 
-### Step 6 — Apply Slab design controls
+### Step 6 — Apply theme design controls
 
-This theme exposes most visual changes through schema settings. Prefer these settings over arbitrary `custom_css`. Read the relevant schema first and only emit setting keys and values that exist there.
+Prefer schema-defined design settings over arbitrary `custom_css`. Read the relevant schema first and only emit setting keys and values that exist in the target theme.
 
 **Global design settings (`config/settings_data.json`):**
 
-- Use global settings for broad storefront-wide changes: body foreground/background, color schemes, theme fonts, heading/body/button typography systems, default margins/gaps, button/input/element radii, and global border widths.
+- Use global settings for broad storefront-wide changes, such as site-wide colors, typography systems, spacing defaults, radii, and border defaults.
 - Before editing global values, read `config/settings_schema.json` and `config/settings_data.json`. Preserve the existing `current` object shape and only update keys that exist in the schema.
-- Key global families in this theme include:
-  - Colors: `color_schemes`, `color_body_background`, `color_body_foreground`, `color_error`, `color_success`, `color_mobile_bar`, `color_overlay_background`, `color_links_type`, `color_links_custom`.
-  - Typography: `type_font_body`, `type_font_heading`, `type_font_subheading`, `type_font_accent`, plus heading/button type controls such as `type_button_font`, `type_button_line_height`, `type_button_letter_spacing`, `type_button_case`, and `type_heading_*`.
-  - Shape and borders: `border_button_radius`, `border_input_radius`, `border_element_radius`, `border_button_width`.
-- Do not create arbitrary color scheme IDs. If `color_type: "custom"` uses `color_scheme_custom`, pick an existing scheme ID from `settings_data.json` / the theme editor data. Otherwise use `color_type: "base"` with schema-listed utility class values.
-- Use global changes only when the requested design should affect the whole storefront. For one homepage or one section, prefer section/block settings.
+- Do not create arbitrary color scheme IDs, utility class values, or token names. Use existing settings data and schema-listed options.
+- Use global changes only when the requested design should affect the whole storefront. For one page, one template, or one section, prefer section/block settings.
 
-**Section settings (`sections/section.liquid`):**
+**Section settings (`sections/*.liquid`):**
 
-- Use section settings for broad bands of layout and styling. Common real settings are:
-  - Spacing: `spacing_top`, `spacing_bottom`, `minimum_height`, `gap_size`.
-  - Width/margins: `margin`, `mobile_margin`, `enable_mobile_margin`.
-  - Colors/borders: `color_type`, `color_scheme_custom`, `color_scheme`, `color_border`, `border_position`.
-  - Layout/behavior: `y_alignment`, `enable_header_overlap`, `enable_hide_on_scroll`, `show_above`, `scroll_snap_align`, `visibility`.
-  - Background media: `enable_background_image_or_video`, `image_background_desktop`, `image_background_mobile`, `video_background`, `show_video_on_mobile`, `show_entire_image`.
-- Section `margin` controls the outer content width (`default`, `narrow`, `standard`, `wide`, `full`, `none`). Use `margin: "none"` only for full-bleed bands; use `default` for normal content.
-- `gap_size` options are schema values (`none`, `default`, `xs`, `sm`, `md`, `lg`, `xl`). Do not invent pixel strings.
-- `color_scheme` values must be exact schema utility strings such as `color-bg__body-bg color-tx__text-default`, `color-bg__overlay-1 color-tx__text-default`, `color-bg__shade-1 color-tx__text-default`, or `bg-transparent`.
-- `color_border` and `border_position` must use exact schema class strings. Use `border-0!` for no border when that option exists; otherwise use a listed divider/border class.
-- `custom_css` entries must be complete CSS rules with selectors, e.g. `.rte { text-transform: uppercase; }`. Do not use standalone declarations like `--color__scheme-bg: transparent;` or selectorless rules like `{ background: ... }`.
+- Use section settings for broad bands of layout and styling: spacing, width, margins, colors, borders, alignment, visibility, behavior, and background media when the section schema supports them.
+- Select values must be exact schema options. Do not invent pixel strings, CSS utility strings, animation names, or class names.
+- If a section exposes custom CSS, entries must be complete CSS rules with selectors, e.g. `.rte { text-transform: uppercase; }`. Do not use standalone declarations or selectorless rules.
 
 **Block settings (`blocks/*.liquid`):**
 
-- Use block settings for local visual adjustments inside a section. Common setting families across Slab blocks are:
-  - Spacing: `enable_x_padding`, `enable_y_padding`, `enable_t_padding`, `enable_b_padding`, `spacing_top`, `spacing_bottom`, `gap_size`.
-  - Colors: `color_type`, `color_scheme_custom`, `color_scheme`, `color_background`, `color_text`, `color_button`, `color_button_custom`, `enable_inheritance`.
-  - Borders/shape: `color_border`, `border_position`, `radius`, `enable_shadow`, `enable_block_elevation`.
-  - Typography: `font_family`, `font_size`, `font_size_custom`, `line_height_custom`, `letter_spacing_custom`.
-  - Layout: `x_alignment`, `y_alignment`, `width`, `width_mobile`, `width_desktop`, `minimum_height`, `enable_height_fill`, `sticky_position`, `visibility`.
-  - Animation: `load_animation`, `scroll_animation`.
-- Respect inheritance. If a block should use its parent section/container colors, set `enable_inheritance: true` and avoid extra color settings unless the schema requires defaults. If it should override, set `enable_inheritance: false` and provide valid `color_type`/scheme/text/border values from that block schema.
-- Typography settings vary by block. For `richtext`, schema values include font families like `""`, `*:type__heading`, `*:type__subheading`, `*:type__accent`; font sizes like `*:type--`, `*:type--small`, or heading presets. Custom ranges must obey steps (`font_size_custom` min `4`, step `2`; `line_height_custom` min `100`, step `5`; `letter_spacing_custom` min `-3`, step `0.1`).
-- Layout container blocks have restricted child rules and layout settings:
-  - `layout__flex` directly accepts only `_g__flex-item`; put content blocks inside `_g__flex-item`.
-  - `layout__grid` accepts grid/feed blocks and theme blocks; use `row_desktop`, `row_mobile`, and `gap_size` from schema.
-  - Slider/list/grid private blocks often render repeated resource cards; follow existing presets for static `product-card` / card child blocks.
-- Animation values must be exact schema options. Common load values include `""`, `load-fadein`, and `load-fadein-offset`; common scroll values include `""`, `scroll-fullblurinout-10-90`, `scroll-slidedownup-10-90`, `scroll-slideupdown-10-90`, `scroll-slideleftright-10-90`, `scroll-sliderightleft-10-90`, and `scroll-zoominout-10-90` when listed by that block.
-- Do not copy a setting from one block type into another unless that destination block schema declares the same setting id and accepts the same value.
+- Use block settings for local visual adjustments inside a section: spacing, colors, borders, shape, typography, layout, visibility, inheritance, and animation when the block schema supports them.
+- Respect inheritance settings when a block should use parent section/container styles. Only override local colors, typography, or borders when the destination block schema declares those settings and the design requires it.
+- Typography, layout, and animation settings vary by block. Validate every setting ID, range step, select option, and enum-like string against the destination block schema.
+- Layout container blocks often have restricted child rules. Follow each parent block's schema for allowed children, and copy nesting patterns only from the same target theme or a verified matching bundled example.
+- Do not copy a setting from one block type into another unless that destination block schema declares the same setting ID and accepts the same value.
 
 ### Step 7 — Compile JSON structure
 
@@ -185,9 +163,9 @@ Follow Shopify’s JSON template shape. If the theme ships **Cursor rules** (e.g
 
 **Settings (block-based themes):**
 
-- Grids often use `row_desktop`, `row_mobile`, `gap_size`, `enable_x_padding` — **only if** those keys exist in the target schema.
+- Layout blocks often expose settings for column counts, rows, gaps, padding, and responsive behavior. Use only the setting IDs and values declared by the target schema.
 - Prefer translation keys for block `name` when the theme does: e.g. `"t:blocks.image"`.
-- Align `color_scheme` and spacing with the theme’s design system.
+- Align color and spacing settings with the theme’s design system.
 
 **Richtext content rules:**
 
@@ -198,7 +176,7 @@ Shopify sanitizes HTML in `richtext` and `text` (rich) settings. Only a limited 
 - **No `class` attributes** on inline elements in richtext.
 - If the design requires colored text within a single text block, this is a **CSS customization gap**—note it and add a stylesheet rule rather than using inline styles.
 
-### Step 7 — Validate
+### Step 8 — Validate
 
 Run the **Validation checklist** below before finishing.
 
@@ -229,7 +207,7 @@ When `npm run dev` or `shopify theme dev` is already running, use its upload log
 Do not start a duplicate dev server if one is already running. Prefer the existing terminal output. Known upload-only JSON template errors to guard locally include:
 
 - `Invalid CSS value`: custom CSS array entries must be complete CSS rules with selectors, not standalone declarations.
-- `Setting '<id>' must be a step in the range`: range settings must use exact `min + (N * step)` values, including hidden settings like `font_size_custom` and `line_height_custom`.
+- `Setting '<id>' must be a step in the range`: range settings must use exact `min + (N * step)` values, including settings hidden by `visible_if`.
 - `'<id>' is not a valid block id`: block instance IDs must not use invalid characters or leading `_`.
 - `static block with id '<id>' must not be present in 'block_order'`: remove static block IDs from sibling `block_order`.
 
@@ -290,5 +268,3 @@ These are the Shopify documentation pages this skill's content is derived from. 
 | [Section schema](https://shopify.dev/docs/storefronts/themes/architecture/sections/section-schema)  | Discover allowed block types, Step 3 — Analyze schemas |
 | [Blocks](https://shopify.dev/docs/storefronts/themes/architecture/blocks)                           | Discover allowed block types                           |
 | [Theme blocks](https://shopify.dev/docs/storefronts/themes/architecture/blocks/theme-blocks)        | Discover allowed block types, Step 3 — Analyze schemas |
-
-
